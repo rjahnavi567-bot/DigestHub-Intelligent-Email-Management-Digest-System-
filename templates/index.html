@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>Email Digest Dashboard</h1>
+<h3>Total Emails: {{ total_emails }}</h3>
+<p>
+<a href="/">All</a> |
+
+<a href="/?category=Work">Work</a> |
+
+<a href="/?category=Learning">Learning</a> |
+
+<a href="/?category=Security">Security</a> |
+
+<a href="/?category=Promotions">Promotions</a> |
+
+<a href="/?category=Other">Other</a>
+</p>
+
+<ul>
+<li>Work: {{ work_count }}</li>
+<li>Learning: {{ learning_count }}</li>
+<li>Security: {{ security_count }}</li>
+<li>Promotions: {{ promotion_count }}</li>
+<li>Other: {{ other_count }}</li>
+</ul>
+<h3>Email Distribution</h3>
+
+<canvas id="emailChart"></canvas>
+<form method="GET">
+
+<input
+type="text"
+name="search"
+placeholder="Search sender or subject">
+
+<button type="submit">
+Search
+</button>
+
+</form>
+
+<br>
+<table border="1">
+
+<tr>
+    <th>Sender</th>
+    <th>Subject</th>
+    <th>Date</th>
+</tr>
+
+{% for email in emails %}
+
+<tr>
+
+    <td>{{ email[1] }}</td>
+
+    <td>
+    <a href="/email/{{ email[0] }}">
+        {{ email[2] }}
+    </a>
+    </td>
+
+    <td>{{ email[3] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<script>
+
+const ctx = document.getElementById('emailChart');
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: [
+            'Work',
+            'Learning',
+            'Security',
+            'Promotions',
+            'Other'
+        ],
+        datasets: [{
+            data: [
+                {{ work_count }},
+                {{ learning_count }},
+                {{ security_count }},
+                {{ promotion_count }},
+                {{ other_count }}
+            ]
+        }]
+    }
+});
+
+</script>
+</body>
+</html>
